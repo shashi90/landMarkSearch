@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title> LANDMARK SEARCH </title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+<link href="/css/chat.css" rel='stylesheet' type='text/css' />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"/>
+<script src="/libs/jQuery/jquery-3.2.1.min.js"></script>
+<link rel='stylesheet prefetch' href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css'>
+<script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'></script>
+<script src="/libs/socket/socket.io.min.js"></script>
+<script type="text/javascript" src="/libs/nicescroll/nicescroll.min.js"></script>
+<script src="/libs/angular-1.6.4/angular.min.js"></script>
+<script src="/libs/angular-1.6.4/angular-sanitize.min.js"></script>
+<script src="https://cdn.rawgit.com/Luegg/angularjs-scroll-glue/master/src/scrollglue.js"></script>
+<script type="text/javascript">
+	var user = <%- JSON.stringify(user) %>;
+	$(document).ready(function(e) {
+		$('#chat-container').niceScroll({styler:"fb",cursorcolor:"#dadada", autohidemode: false, cursorwidth: '6', cursorborderradius: '0px', spacebarenabled:false, cursorborder: '0'});
+	})
+</script>
+<script src="/js/chat.js"></script>
+</head>
+
+<body ng-app="chatApp" style="overflow:hidden">
+<div id="chatBox" ng-controller="chatCtl">
+	<div id="container">
+		<div id="side-panel">
+			<div id="side-panel-header">
+				<div id="avatar">
+					<img src="{{user.avatarUrl ? user.avatarUrl : '/images/avatar.png'}}" width="100%" height="100%" style="border-radius: 50%" /> 
+				</div>
+			</div>
+			<div id="side-panel-container">
+				<div id="chatroom-search-box" ng-class="{crfocus: crfocus}">
+					<input type="text" id="chatRoomSearch" placeholder="Search" ng-model="crtext" ng-focus="crfocus=true" ng-blur="crfocus=false" />
+					<i class="fa fa-search" id="searchIcon"></i>
+					<i class="fa fa-arrow-left" id="backIcon" style="display: none; color: red; font-size: 18px; top: 16px;"></i>
+				</div>
+				<div id="chatrooms-div">
+				</div>
+			</div>
+		</div>
+		<div id="main-panel">
+			<div id="main-panel-header">
+				<div id="chatRoomInfo">
+					<div>
+						<div class="cr-avatar" ng-class="{'fa fa-globe': !currCR.avatarUrl}" style="margin-top: -5px;"></div>
+						<label class="cr-name" style="display: inline-block;margin-left: 10px;font-size: 18px; margin-top: 10px;">Show LandMark</label>
+					</div>
+				</div>
+			</div>
+			<div id="chat-container" scroll-glue force-glue>
+				<div id="default-app-info">
+					
+				</div>
+				<div ng-repeat="msg in allMessages" class="messages" ng-class="{rightAlign: msg.fromServer}" ng-cloak >
+					<div style="position: relative;" ng-class="{repeatedUser: isRepeatedUserMsg($index)}" ng-if="msg.msg">{{msg.msg}}<span class="chat-arrow"></span></div>
+					<div style="position: relative;" ng-class="{repeatedUser: isRepeatedUserMsg($index)}" ng-if="msg.image"><img src="{{msg.image}}" style="max-width: 100%" /><span class="chat-arrow"></span></div>
+					<div style="clear: both; padding: 0px;" ></div>
+				</div>
+				<div class="messages rightAlign" id="ajax-popup-bg" style="display: none;">
+					<div style="width:120px; height:24px; z-index: 30; border-radius: 8px; background-color: rgba(0,0,0, 0.7);">
+						<span class="spinner">
+							<span class="ball"></span>
+						</span>
+					</div>
+				</div>
+			</div>
+			<div id="chat-input-box">
+				<div id="input-box">
+					<input type="text" name="chatMsg" id="chatMsg" ng-model="chat.currMsg" placeholder="Type a message" ng-keypress="sendMsg($event)" />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

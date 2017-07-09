@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>LANDMARK | Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<style>
+@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
+body {
+  background-color: #f8f8f8 !important;
+  font-size: 12px !important;
+  margin: 0px;
+  padding: 0px;
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+#header-box {
+  height: 220px;
+  width: 100%;
+  background-color: rgba(111, 4, 50, 0.59);
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#userInfoContainer {
+  z-index: 100;
+  width: 310px;
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  height: 400px;
+  z-index: 5000;
+  overflow: hidden;
+  border-radius: 5px;
+  margin-left: -155px;
+  margin-bottom: 10px;
+  background-color: #ffffff;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#userInfoHeader-1, #userInfoHeader-2 {
+  background-color: #fbfbfb;
+  border-radius: 5px 5px 0px 0px;
+  width: 310px;
+  height: 50px;
+  padding-left: 25px;
+  padding-top: 12px;
+  font-size: 14px;
+  color: #939393;
+  font-weight: 500;
+}
+
+#uIImageDiv {
+  position: relative;
+  margin-top: 30px;
+  margin-left: 25px;
+}
+
+#uII-2 {
+  position: absolute;
+  background-color: #C90000;
+  top: 28px;
+  left: 45px;
+  background-image: url(https://s3-ap-southeast-1.amazonaws.com/doext/oo-speech-bubble.png);
+  width: 53px;
+  height: 33px;
+  background-repeat: no-repeat;
+  background-size: 53px 33px;
+}
+.group {
+  margin-top: 35px;
+  position: relative;
+  margin-bottom: 40px;
+  margin-left: 25px;
+}
+
+.group input {
+  font-size: 18px;
+  font-weight: 400;
+  padding-top: 12px;
+  display: block;
+  width: 260px;
+  border: none;
+  border-bottom: 1px solid #cbcbcb;
+}
+
+.group input:focus { 
+  outline:none; 
+}
+
+.group input:-webkit-autofill,
+.group input:-webkit-autofill:hover,
+.group input:-webkit-autofill:focus,
+.group input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.group label {
+  color:#999; 
+  font-size:18px;
+  font-weight:normal;
+  position:absolute;
+  pointer-events:none;
+  left: 0px;
+  top: 10px;
+  transition:0.2s ease all; 
+  -moz-transition:0.2s ease all; 
+  -webkit-transition:0.2s ease all;
+}
+
+.group input:focus ~ label, .group input:valid ~ label {
+  top: -5px;
+  font-size: 11px;
+}
+
+#userMobileGroup input:focus ~ span, #userMobileGroup input:valid ~ span {
+  display: block !important;
+}
+
+#userMobileGroup input {
+  width: 220px;
+}
+
+#userInfoButton{
+  border-radius: 5px;
+  background-color: #C90000;
+  color: #ffffff;
+  width: 125px;
+  height: 40px;
+  margin-left: 25px;
+  cursor: pointer;
+  border: 0px;
+  font-size: 14px;
+}
+
+button:focus, button:active {
+  outline: 0px;
+  text-decoration: none;
+}
+
+#userMobileGroup span {
+  color: #888;
+  font-size: 18px;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 0px;
+  top: 12px;
+}
+
+#invalidPhoneL {
+  position: absolute;
+  left: 85px;
+  color: red;
+  bottom: 58px;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.sclblQ, .group input:focus ~ label, .group input:valid ~ label {
+    color: #C90000;
+}
+
+.login-page p {
+    margin-left: 25px;
+    font-size: 14px;
+    color: #a8a8a8;
+    font-weight: 500;
+    margin-top: 10px;
+}
+</style>
+<script src="/libs/jQuery/jquery-3.2.1.min.js"></script>
+<script>
+if(!$) {
+  $ = jQuery;
+}
+$(document).ready(function(e) {
+
+  $('#userInfoButton').bind('click', function(e) {
+    e.preventDefault();
+    var validated = true;
+    var cust_phno = $('#cust_phoneNo').prop("value");
+
+    if(!cust_phno || cust_phno == "" || isNaN(cust_phno) || cust_phno.length != 10) {
+        $('#cust_phoneNo').focus();
+        validated = false;
+        $('#invalidPhoneL').fadeIn();
+        setTimeout(function(){
+            $('#invalidPhoneL').fadeOut();
+        }, 2000);
+        return false;
+    }
+
+    if(validated) {
+      var custPhoneNo = "91" + cust_phno;
+
+      $.post("/saveUser",{
+          phone: custPhoneNo,
+      }, function(result, status) {
+        if(result.status == 1) {
+          window.location.href = "/"
+        }
+      });
+    }
+  });
+})
+</script>
+</head>
+<body>
+<div id="header-box">
+
+</div>
+<div id="userInfoContainer">
+  <div id="otp-send-page" style="left: 0px; top: 0px; position: absolute;">
+    <div id="userInfoHeader-1">
+      Please enter details.<br>This will take less than a min.
+    </div>
+    <div class="login-page" class="pages" style="display: block;">
+      <div id="uIImageDiv">
+        <img id="uII-1" width="67" height="117" src="https://s3-ap-southeast-1.amazonaws.com/doext/oo-otp-phone.png" />
+        <div id="uII-2"/></div>
+      </div>
+      <form class="otpRequest-form">
+        <div class="group" id="userMobileGroup">
+          <input type="text" maxlength="10" id="cust_phoneNo" autocomplete="off" style="padding-left: 35px" required/>
+          <label>Mobile Number</label>
+          <span style="display:none">+91</span>
+        </div>
+        <label id="invalidPhoneL" style="display: none">Enter Valid Mobile Number</label>
+        <button id="userInfoButton">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
